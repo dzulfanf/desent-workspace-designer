@@ -1,6 +1,6 @@
 # Desent Workspace Designer
 
-A responsive workspace rental configurator built with React, TypeScript, and Next.js.
+A responsive workspace rental configurator built with React, TypeScript, Next.js, and Tailwind CSS.
 
 The application allows users to configure a workspace by selecting:
 
@@ -14,6 +14,95 @@ The application allows users to configure a workspace by selecting:
 - Currency
 
 The selected configuration is reflected in a visual workspace preview and a review setup summary.
+
+## Features
+
+### Workspace Configuration
+
+Users can configure a workspace through a guided selection flow:
+
+- Select a workspace location
+- Select a rental date
+- Select a currency
+- Select a desk
+- Select a desk variant / finish
+- Select a chair
+- Select a chair variant
+- Add or remove accessories
+- Configure available workspace extensions
+
+### Product Availability
+
+Products can have availability states based on the selected workspace configuration.
+
+Unavailable products are visually disabled and cannot be selected.
+
+The availability model is currently represented as local application data rather than a backend inventory system.
+
+### Product Variant Preview
+
+Products can define multiple variants such as different desk or chair finishes.
+
+Variant images can be previewed directly from the product card without selecting the product first.
+
+This creates a distinction between:
+
+1. **Previewing a variant**
+2. **Selecting a product**
+
+For example, a user can click a desk finish and immediately see the corresponding image without changing the currently selected desk.
+
+### Workspace Preview
+
+The selected workspace is reflected in a lightweight visual preview.
+
+The preview can represent:
+
+- Desk
+- Chair
+- Monitor
+- Monitor arm
+- Desk lamp
+- Speakers
+- Indoor plant
+- Other selected accessories
+
+Selected product variants are also passed into the workspace preview so the preview can reflect the selected configuration.
+
+### Review Setup
+
+The review setup provides a summary of the current workspace configuration, including:
+
+- Selected desk
+- Selected desk variant
+- Selected chair
+- Selected chair variant
+- Selected accessories
+- Rental information
+- Pricing information
+
+The review action is kept separate from the product browsing experience so users can continue configuring the workspace without leaving the main flow.
+
+### Responsive Interface
+
+The interface adapts to different viewport sizes.
+
+The product selection experience is optimized for:
+
+- Mobile
+- Tablet
+- Desktop
+
+Product grids, spacing, typography, header controls, workspace preview, and review actions adapt based on the available viewport.
+
+## Tech Stack
+
+- **Next.js** — React framework
+- **React** — UI development
+- **TypeScript** — Type-safe application development
+- **Tailwind CSS** — Utility-first styling and responsive design
+- **pnpm** — Package management
+- **Vercel** — Deployment
 
 ## Design Approach
 
@@ -136,7 +225,7 @@ It demonstrates:
 
 - Responsive UI
 - Product selection
-- Variant selection
+- Variant selection and preview
 - Availability states
 - Workspace preview
 - Extension selection
@@ -146,6 +235,8 @@ It demonstrates:
 - Review summary
 - Component composition
 - Type-safe React props
+- Responsive product grids
+- Interactive product cards
 
 ## Current Limitations
 
@@ -204,6 +295,6 @@ A future pricing model could allow:
 
 ```text
 Product
-  ├── Variant A → $14/week
-  ├── Variant B → $16/week
-  └── Variant C → $18/week
+ ├── Variant A → $14/week
+ ├── Variant B → $16/week
+ └── Variant C → $18/week
