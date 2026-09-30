@@ -123,7 +123,8 @@ export function ReviewSetupBar({
             <button
               type="button"
               onClick={onOpen}
-              className="hidden shrink-0 rounded-full bg-neutral-950 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-neutral-800 sm:block"
+              disabled={!desk}
+              className={`hidden shrink-0 rounded-full ${!desk ? 'bg-neutral-400' : 'bg-neutral-950'} px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-neutral-800 sm:block`}
             >
               Review setup →
             </button>
@@ -180,7 +181,8 @@ export function ReviewSetupBar({
           <button
             type="button"
             onClick={onOpen}
-            className="w-full rounded-full bg-neutral-950 px-4 py-2.5 text-xs font-medium text-white transition-colors hover:bg-neutral-800"
+            className={`w-full rounded-full  ${!desk ? 'bg-neutral-400' : 'bg-neutral-950'} px-4 py-2.5 text-xs font-medium text-white transition-colors hover:bg-neutral-800`}
+            disabled={!desk}
           >
             Review setup →
           </button>

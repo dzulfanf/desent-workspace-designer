@@ -1,23 +1,34 @@
 "use client";
 
-import { AccessoryCard } from "./accessory-card";
 import type {
   WorkspaceCurrency,
   WorkspaceProduct,
   WorkspaceProductWithAvailability,
 } from "@/types/workspace";
 
+import { AccessoryCard } from "./accessory-card";
+
 type AccessoryGridProps = {
   products: WorkspaceProductWithAvailability[];
-  selectedAccessories: WorkspaceProduct[];
+
+  selectedAccessoryIds: string[];
+  previewAccessoryVariants: Record<string, string>;
+
   onToggleAccessory: (product: WorkspaceProduct) => void;
+  onPreviewAccessoryVariant: (
+    product: WorkspaceProduct,
+    variantId: string,
+  ) => void;
+
   currency: WorkspaceCurrency;
 };
 
 export function AccessoryGrid({
   products,
-  selectedAccessories,
+  selectedAccessoryIds,
+  previewAccessoryVariants,
   onToggleAccessory,
+  onPreviewAccessoryVariant,
   currency,
 }: AccessoryGridProps) {
   if (products.length === 0) {
@@ -36,12 +47,19 @@ export function AccessoryGrid({
         <AccessoryCard
           key={product.id}
           product={product}
-          isSelected={selectedAccessories.some(
-            (item) => item.id === product.id,
-          )}
+          isSelected={selectedAccessoryIds.includes(product.id)}
           isAvailable={isAvailable}
           onToggle={() => onToggleAccessory(product)}
           currency={currency}
+          selectedVariantId={
+            previewAccessoryVariants[product.id]
+          }
+          onVariantSelect={(variantId) =>
+            onPreviewAccessoryVariant(
+              product,
+              variantId,
+            )
+          }
         />
       ))}
     </div>

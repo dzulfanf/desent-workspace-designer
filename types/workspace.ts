@@ -4,6 +4,7 @@ export type ProductVariant = {
   id: string;
   name: string;
   value: string;
+  image?: string;
 };
 
 export type WorkspaceCurrency = "USD" | "EUR" | "JPY" | "CNY" | "IDR" | "THB" | "VND";

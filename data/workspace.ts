@@ -14,22 +14,19 @@ export const workspaceProducts: WorkspaceProduct[] = [
     description:
       "Dual-motor sit/stand desk with a solid FSC white oak surface.",
     dimensions: "160 × 80 cm",
-    image: "/workspace/desks/nordic-ascent.jpg",
+    image: "/images/workspace/desks/nordic-ascent/natural.webp",
     variants: [
       {
         id: "natural-oak",
         name: "Finish",
         value: "Natural Oak",
-      },
-      {
-        id: "walnut",
-        name: "Finish",
-        value: "Walnut",
+        image: "/images/workspace/desks/nordic-ascent/natural.webp",
       },
       {
         id: "black",
         name: "Finish",
         value: "Black",
+        image: "/images/workspace/desks/nordic-ascent/black.webp",
       },
     ],
     availability: [
@@ -64,17 +61,19 @@ export const workspaceProducts: WorkspaceProduct[] = [
     description:
       "Solid Nordic birch desk with an integrated cable trough.",
     dimensions: "140 × 75 cm",
-    image: "/workspace/desks/koto-studio.jpg",
+    image: "/images/workspace/desks/koto-studio/natural.webp",
     variants: [
       {
         id: "birch-ash",
         name: "Finish",
         value: "Birch Ash",
+        image: "/images/workspace/desks/koto-studio/ash.webp",
       },
       {
         id: "natural-birch",
         name: "Finish",
         value: "Natural Birch",
+        image: "/images/workspace/desks/koto-studio/natural.webp",
       },
     ],
     availability: [
@@ -109,12 +108,13 @@ export const workspaceProducts: WorkspaceProduct[] = [
     description:
       "Minimal workspace desk with a cast iron pillar base.",
     dimensions: "120 × 70 cm",
-    image: "/workspace/desks/soma-minimal.jpg",
+    image: "/images/workspace/desks/soma-minimal/cast-iron.webp",
     variants: [
       {
         id: "cast-iron-ash",
         name: "Finish",
         value: "Cast Iron & Ash",
+        image: "/images/workspace/desks/soma-minimal/cast-iron.webp",
       },
     ],
     availability: [
@@ -149,7 +149,7 @@ export const workspaceProducts: WorkspaceProduct[] = [
   //   description:
   //     "Executive desk with oak veneer and concealed wire management.",
   //   dimensions: "180 × 85 cm",
-  //   image: "/workspace/desks/fjord-executive.jpg",
+  //   image: "/images/workspace/desks/fjord-executive.jpg",
   //   variants: [
   //     {
   //       id: "smoked-walnut",
@@ -189,22 +189,19 @@ export const workspaceProducts: WorkspaceProduct[] = [
     description:
       "Ergonomic task chair with adjustable lumbar support and breathable mesh.",
     dimensions: "68 × 68 × 110 cm",
-    image: "/workspace/chairs/atlas-ergonomic.jpg",
+    image: "/images/workspace/chairs/atlas-ergonomic/black.webp",
     variants: [
       {
         id: "atlas-black",
         name: "Color",
         value: "Black",
+        image: "/images/workspace/chairs/atlas-ergonomic/black.webp",
       },
       {
         id: "atlas-grey",
         name: "Color",
         value: "Grey",
-      },
-      {
-        id: "atlas-sand",
-        name: "Color",
-        value: "Sand",
+        image: "/images/workspace/chairs/atlas-ergonomic/gray.webp",
       },
     ],
     availability: [
@@ -239,17 +236,19 @@ export const workspaceProducts: WorkspaceProduct[] = [
     description:
       "Minimal task chair with a supportive backrest and compact footprint.",
     dimensions: "62 × 60 × 96 cm",
-    image: "/workspace/chairs/form-task.jpg",
+    image: "/images/workspace/chairs/form-task/black.webp",
     variants: [
       {
         id: "form-black",
         name: "Color",
         value: "Black",
+        image: "/images/workspace/chairs/form-task/black.webp",
       },
       {
         id: "form-cream",
         name: "Color",
         value: "Cream",
+        image: "/images/workspace/chairs/form-task/cream.webp",
       },
     ],
     availability: [
@@ -284,17 +283,19 @@ export const workspaceProducts: WorkspaceProduct[] = [
     description:
       "Premium upholstered chair designed for long working sessions.",
     dimensions: "72 × 70 × 118 cm",
-    image: "/workspace/chairs/mono-executive.jpg",
+    image: "/images/workspace/chairs/mono-executive/charcoal.webp",
     variants: [
       {
         id: "mono-charcoal",
         name: "Color",
         value: "Charcoal",
+        image: "/images/workspace/chairs/mono-executive/charcoal.webp",
       },
       {
         id: "mono-tan",
         name: "Color",
         value: "Tan",
+        image: "/images/workspace/chairs/mono-executive/tan.webp",
       },
     ],
     availability: [
@@ -328,7 +329,7 @@ export const workspaceProducts: WorkspaceProduct[] = [
     pricePerWeek: 9,
     description:
       "34-inch ultrawide monitor for a spacious multitasking setup.",
-    image: "/workspace/accessories/ultrawide-monitor.jpg",
+    image: "/images/workspace/accessories/ultrawide-monitor.webp",
     availability: [
       {
         locationId: "bali",
@@ -360,7 +361,7 @@ export const workspaceProducts: WorkspaceProduct[] = [
     pricePerWeek: 4,
     description:
       "Adjustable desk lamp with a warm, focused light.",
-    image: "/workspace/accessories/desk-lamp.jpg",
+    image: "/images/workspace/accessories/desk-lamp.webp",
     availability: [
       {
         locationId: "bali",
@@ -382,7 +383,7 @@ export const workspaceProducts: WorkspaceProduct[] = [
     pricePerWeek: 5,
     description:
       "Adjustable monitor arm that keeps the desk surface clear.",
-    image: "/workspace/accessories/monitor-arm.jpg",
+    image: "/images/workspace/accessories/monitor-arm.webp",
     availability: [
       {
         locationId: "bali",
@@ -414,7 +415,7 @@ export const workspaceProducts: WorkspaceProduct[] = [
     pricePerWeek: 3,
     description:
       "Low-maintenance indoor plant for a more natural workspace.",
-    image: "/workspace/accessories/indoor-plant.jpg",
+    image: "/images/workspace/accessories/indoor-plant.webp",
     availability: [
       {
         locationId: "bali",
@@ -441,7 +442,7 @@ export const workspaceProducts: WorkspaceProduct[] = [
     pricePerWeek: 6,
     description:
       "Compact desktop speaker with a clean, minimal design.",
-    image: "/workspace/accessories/desk-speaker.jpg",
+    image: "/images/workspace/accessories/desk-speaker.webp",
     availability: [
       {
         locationId: "bali",

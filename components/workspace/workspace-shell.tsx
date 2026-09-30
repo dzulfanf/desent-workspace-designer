@@ -3,7 +3,14 @@
 import { useState } from "react";
 
 import { DeskGrid } from "./desk/desk-grid";
-import {
+import { ChairGrid } from "./chair/chair-grid";
+import { AccessoryGrid } from "./accessory/accessory-grid";
+import { WorkspacePreview } from "./workspace-preview";
+import { ExtensionGrid } from "./extensions/extension-grid";
+import { ReviewSetupBar } from "./review-bar/review-summary-bar";
+import { ReviewSetupModal } from "./review/review-setup-modal";
+
+import type {
   ProductVariant,
   WorkspaceCurrency,
   WorkspaceExtension,
@@ -13,12 +20,6 @@ import {
   WorkspaceProductWithAvailability,
 } from "@/types/workspace";
 
-import { ChairGrid } from "./chair/chair-grid";
-import { AccessoryGrid } from "./accessory/accessory-grid";
-import { VariantSelector } from "./variant-selector";
-import { WorkspacePreview } from "./workspace-preview";
-import { ExtensionGrid } from "./extensions/extension-grid";
-
 import {
   workspaceLocations,
   workspaceProducts,
@@ -26,8 +27,6 @@ import {
 } from "@/data/workspace";
 
 import { isProductAvailable } from "@/lib/workspace/is-product-available";
-import { ReviewSetupBar } from "./review-bar/review-summary-bar";
-import { ReviewSetupModal } from "./review/review-setup-modal";
 
 type WorkspaceTab =
   | "desks"
@@ -38,6 +37,7 @@ type WorkspaceShellProps = {
   currency: WorkspaceCurrency;
   location: WorkspaceLocation | null;
   rentalDate: string;
+
   onLocationChange: (location: WorkspaceLocation) => void;
   onRentalDateChange: (date: string) => void;
 };
@@ -47,8 +47,11 @@ export function WorkspaceShell({
   location,
   rentalDate,
   onLocationChange,
-  onRentalDateChange
+  onRentalDateChange,
 }: WorkspaceShellProps) {
+  /*
+   * Selected workspace items
+   */
   const [selectedDesk, setSelectedDesk] =
     useState<WorkspaceProduct | null>(null);
 
@@ -64,12 +67,124 @@ export function WorkspaceShell({
   const [selectedAccessories, setSelectedAccessories] =
     useState<WorkspaceProduct[]>([]);
 
+  /*
+   * Variant previews
+   *
+   * These states are intentionally separate from the
+   * selected workspace items.
+   *
+   * Clicking a variant changes the image shown in the
+   * corresponding card without selecting the product.
+   */
+  const [previewDeskVariants, setPreviewDeskVariants] =
+    useState<Record<string, string>>({});
+
+  const [previewChairVariants, setPreviewChairVariants] =
+    useState<Record<string, string>>({});
+
+  const [previewAccessoryVariants, setPreviewAccessoryVariants] =
+    useState<Record<string, string>>({});
+
+  /*
+   * Extensions
+   */
   const [selectedExtensions, setSelectedExtensions] =
     useState<WorkspaceExtension[]>([]);
 
   const [selectedExtensionItems, setSelectedExtensionItems] =
     useState<WorkspaceExtensionItem[]>([]);
 
+  /*
+   * UI state
+   */
+  const [activeTab, setActiveTab] =
+    useState<WorkspaceTab>("desks");
+
+  const [isReviewOpen, setIsReviewOpen] =
+    useState(false);
+
+  /*
+   * Desk
+   */
+  const handleSelectDesk = (
+    product: WorkspaceProduct,
+  ) => {
+    setSelectedDesk(product);
+
+    // Default selected variant for the actual workspace.
+    setSelectedDeskVariant(
+      product.variants?.[0] ?? null,
+    );
+  };
+
+  const handlePreviewDeskVariant = (
+    product: WorkspaceProduct,
+    variantId: string,
+  ) => {
+    setPreviewDeskVariants((current) => ({
+      ...current,
+      [product.id]: variantId,
+    }));
+  };
+
+  /*
+   * Chair
+   */
+  const handleSelectChair = (
+    product: WorkspaceProduct,
+  ) => {
+    setSelectedChair(product);
+
+    // Default selected variant for the actual workspace.
+    setSelectedChairVariant(
+      product.variants?.[0] ?? null,
+    );
+  };
+
+  const handlePreviewChairVariant = (
+    product: WorkspaceProduct,
+    variantId: string,
+  ) => {
+    setPreviewChairVariants((current) => ({
+      ...current,
+      [product.id]: variantId,
+    }));
+  };
+
+  /*
+   * Accessories
+   */
+  const handleToggleAccessory = (
+    product: WorkspaceProduct,
+  ) => {
+    setSelectedAccessories((current) => {
+      const exists = current.some(
+        (item) => item.id === product.id,
+      );
+
+      if (exists) {
+        return current.filter(
+          (item) => item.id !== product.id,
+        );
+      }
+
+      return [...current, product];
+    });
+  };
+
+  const handlePreviewAccessoryVariant = (
+    product: WorkspaceProduct,
+    variantId: string,
+  ) => {
+    setPreviewAccessoryVariants((current) => ({
+      ...current,
+      [product.id]: variantId,
+    }));
+  };
+
+  /*
+   * Extensions
+   */
   const handleToggleExtension = (
     extension: WorkspaceExtension,
   ) => {
@@ -106,70 +221,98 @@ export function WorkspaceShell({
     });
   };
 
-  const [activeTab, setActiveTab] =
-    useState<WorkspaceTab>("desks");
+  /*
+   * Availability
+   */
+  const productsWithAvailability: WorkspaceProductWithAvailability[] =
+    workspaceProducts.map((product) => ({
+      product,
+      isAvailable: isProductAvailable({
+        product,
+        locationId: location?.id ?? "",
+        date: rentalDate,
+        rentals: workspaceRentals,
+      }),
+    }));
 
-  const [isReviewOpen, setIsReviewOpen] = useState(false);
+  const desks =
+    productsWithAvailability.filter(
+      ({ product }) => product.type === "desk",
+    );
 
-  const handleSelectDesk = (product: WorkspaceProduct) => {
-    setSelectedDesk(product);
-    setSelectedDeskVariant(null);
-  };
+  const chairs =
+    productsWithAvailability.filter(
+      ({ product }) => product.type === "chair",
+    );
 
-  const handleSelectChair = (product: WorkspaceProduct) => {
-    setSelectedChair(product);
-    setSelectedChairVariant(null);
-  };
+  const accessories =
+    productsWithAvailability.filter(
+      ({ product }) => product.type === "accessory",
+    );
+  
+    /*
+   * Workspace preview
+   *
+   * Preview state is independent from selected workspace state.
+   * A variant can be previewed even when its product has not
+   * been selected yet.
+   */
+  const previewDeskId = Object.keys(previewDeskVariants).find(
+    (productId) => previewDeskVariants[productId],
+  );
 
-  const handleToggleAccessory = (
-    product: WorkspaceProduct,
-  ) => {
-    setSelectedAccessories((current) => {
-      const exists = current.some(
-        (item) => item.id === product.id,
-      );
+  const previewDesk = previewDeskId
+    ? workspaceProducts.find(
+        (product) => product.id === previewDeskId,
+      ) ?? null
+    : selectedDesk;
 
-      if (exists) {
-        return current.filter(
-          (item) => item.id !== product.id,
-        );
-      }
+  const previewDeskVariant = previewDesk
+    ? previewDesk.variants?.find(
+        (variant) =>
+          variant.id ===
+          previewDeskVariants[previewDesk.id],
+      ) ??
+      (selectedDesk?.id === previewDesk.id
+        ? selectedDeskVariant
+        : null)
+    : null;
 
-      return [...current, product];
-    });
-  };
+  const previewChairId = Object.keys(
+    previewChairVariants,
+  ).find(
+    (productId) => previewChairVariants[productId],
+  );
 
+  const previewChair = previewChairId
+    ? workspaceProducts.find(
+        (product) => product.id === previewChairId,
+      ) ?? null
+    : selectedChair;
+
+  const previewChairVariant = previewChair
+    ? previewChair.variants?.find(
+        (variant) =>
+          variant.id ===
+          previewChairVariants[previewChair.id],
+      ) ??
+      (selectedChair?.id === previewChair.id
+        ? selectedChairVariant
+        : null)
+    : null;
+
+  /*
+   * Review summary
+   */
   const itemCount =
     (selectedDesk ? 1 : 0) +
     (selectedChair ? 1 : 0) +
     selectedAccessories.length +
     selectedExtensionItems.length;
-  
-  const productsWithAvailability: WorkspaceProductWithAvailability[] =
-  workspaceProducts.map((product) => ({
-    product,
-    isAvailable: isProductAvailable({
-      product,
-      locationId: location?.id ?? "",
-      date: rentalDate,
-      rentals: workspaceRentals,
-    }),
-  }));
-  
-  const desks = productsWithAvailability.filter(
-    ({ product }) => product.type === "desk",
-  );
-
-  const chairs = productsWithAvailability.filter(
-    ({ product }) => product.type === "chair",
-  );
-
-  const accessories = productsWithAvailability.filter(
-    ({ product }) => product.type === "accessory",
-  );
 
   return (
     <main className="mx-auto max-w-7xl px-6 pb-20 pt-12">
+      {/* Page heading */}
       <div className="mb-10 max-w-2xl">
         <p className="mb-3 text-sm font-medium text-neutral-500">
           Workspace designer
@@ -184,13 +327,16 @@ export function WorkspaceShell({
         </p>
       </div>
 
+      {/* Mobile rental settings */}
       <div className="mb-4 flex gap-2 md:hidden">
         <select
           value={location?.id ?? ""}
           onChange={(event) => {
-            const nextLocation = workspaceLocations.find(
-              (item) => item.id === event.target.value,
-            );
+            const nextLocation =
+              workspaceLocations.find(
+                (item) =>
+                  item.id === event.target.value,
+              );
 
             if (nextLocation) {
               onLocationChange(nextLocation);
@@ -199,7 +345,10 @@ export function WorkspaceShell({
           className="min-w-0 flex-1 rounded-full border border-neutral-200 bg-white px-3 py-2 text-sm outline-none transition-colors hover:border-neutral-400"
         >
           {workspaceLocations.map((item) => (
-            <option key={item.id} value={item.id}>
+            <option
+              key={item.id}
+              value={item.id}
+            >
               {item.name}
             </option>
           ))}
@@ -215,8 +364,11 @@ export function WorkspaceShell({
         />
       </div>
 
-      <section className="grid overflow-hidden bg-white lg:grid-cols-[minmax(0,1fr)_minmax(320px,0.8fr) xl:grid-cols-[minmax(0,1fr)_minmax(400px,0.8fr)]">
-        <div className="border-b border-neutral-200 xl:pr-6 pb-4">
+      {/* Workspace designer */}
+      <section className="grid overflow-hidden bg-white lg:grid-cols-[minmax(0,1fr)_minmax(320px,0.8fr)] xl:grid-cols-[minmax(0,1fr)_minmax(400px,0.8fr)]">
+        {/* Catalog */}
+        <div className="border-b border-neutral-200 pb-4 xl:pr-6">
+          {/* Tabs */}
           <div className="flex rounded-xl border border-neutral-200 bg-neutral-50 p-1">
             <button
               type="button"
@@ -244,7 +396,9 @@ export function WorkspaceShell({
 
             <button
               type="button"
-              onClick={() => setActiveTab("accessories")}
+              onClick={() =>
+                setActiveTab("accessories")
+              }
               className={`flex-1 rounded-lg px-4 py-2.5 text-sm transition-colors ${
                 activeTab === "accessories"
                   ? "bg-white font-medium text-neutral-950 shadow-sm"
@@ -256,6 +410,7 @@ export function WorkspaceShell({
           </div>
 
           <div className="mt-6">
+            {/* DESKS */}
             {activeTab === "desks" && (
               <>
                 <div className="mb-4 mt-5 flex items-center justify-between">
@@ -270,23 +425,26 @@ export function WorkspaceShell({
                     All types · Featured
                   </button>
                 </div>
+
                 <DeskGrid
                   products={desks}
-                  selectedDeskId={selectedDesk?.id ?? null}
+                  selectedDeskId={selectedDesk?.id}
+                  selectedDeskVariantId={
+                    selectedDeskVariant?.id
+                  }
+                  previewDeskVariants={
+                    previewDeskVariants
+                  }
                   onSelectDesk={handleSelectDesk}
+                  onPreviewDeskVariant={
+                    handlePreviewDeskVariant
+                  }
                   currency={currency}
                 />
-
-                {selectedDesk?.variants?.length ? (
-                  <VariantSelector
-                    variants={selectedDesk.variants}
-                    selectedVariantId={selectedDeskVariant?.id ?? null}
-                    onSelect={setSelectedDeskVariant}
-                  />
-                ) : null}
               </>
             )}
 
+            {/* CHAIRS */}
             {activeTab === "chairs" && (
               <>
                 <div className="mb-4 mt-5 flex items-center justify-between">
@@ -301,23 +459,26 @@ export function WorkspaceShell({
                     All types · Featured
                   </button>
                 </div>
+
                 <ChairGrid
                   products={chairs}
-                  selectedChairId={selectedChair?.id ?? null}
+                  selectedChairId={selectedChair?.id}
+                  selectedChairVariantId={
+                    selectedChairVariant?.id
+                  }
+                  previewChairVariants={
+                    previewChairVariants
+                  }
                   onSelectChair={handleSelectChair}
+                  onPreviewChairVariant={
+                    handlePreviewChairVariant
+                  }
                   currency={currency}
                 />
-
-                {selectedChair?.variants?.length ? (
-                  <VariantSelector
-                    variants={selectedChair.variants}
-                    selectedVariantId={selectedChairVariant?.id ?? null}
-                    onSelect={setSelectedChairVariant}
-                  />
-                ) : null}
               </>
             )}
 
+            {/* ACCESSORIES */}
             {activeTab === "accessories" && (
               <>
                 <div className="mb-4 mt-5 flex items-center justify-between">
@@ -332,10 +493,21 @@ export function WorkspaceShell({
                     All types · Featured
                   </button>
                 </div>
+
                 <AccessoryGrid
                   products={accessories}
-                  selectedAccessories={selectedAccessories}
-                  onToggleAccessory={handleToggleAccessory}
+                  selectedAccessoryIds={selectedAccessories.map(
+                    (product) => product.id,
+                  )}
+                  previewAccessoryVariants={
+                    previewAccessoryVariants
+                  }
+                  onToggleAccessory={
+                    handleToggleAccessory
+                  }
+                  onPreviewAccessoryVariant={
+                    handlePreviewAccessoryVariant
+                  }
                   currency={currency}
                 />
               </>
@@ -343,15 +515,21 @@ export function WorkspaceShell({
           </div>
         </div>
 
+        {/* Workspace preview */}
         <WorkspacePreview
           desk={selectedDesk}
           deskVariant={selectedDeskVariant}
           chair={selectedChair}
           chairVariant={selectedChairVariant}
           accessories={selectedAccessories}
+          previewDesk={previewDesk}
+          previewDeskVariant={previewDeskVariant}
+          previewChair={previewChair}
+          previewChairVariant={previewChairVariant}
         />
       </section>
 
+      {/* Floating review bar */}
       <ReviewSetupBar
         currency={currency}
         desk={selectedDesk}
@@ -359,9 +537,10 @@ export function WorkspaceShell({
         accessories={selectedAccessories}
         extensionItems={selectedExtensionItems}
         itemCount={itemCount}
-        onOpen={() =>  setIsReviewOpen(true)}
+        onOpen={() => setIsReviewOpen(true)}
       />
 
+      {/* Review modal */}
       <ReviewSetupModal
         isOpen={isReviewOpen}
         onClose={() => setIsReviewOpen(false)}
@@ -376,6 +555,7 @@ export function WorkspaceShell({
         itemCount={itemCount}
       />
 
+      {/* Extensions */}
       <section className="mt-8">
         <div className="mb-8">
           <p className="text-sm font-medium text-neutral-500">
@@ -393,8 +573,12 @@ export function WorkspaceShell({
           selectedExtensionItemIds={selectedExtensionItems.map(
             (item) => item.id,
           )}
-          onToggleExtension={handleToggleExtension}
-          onToggleExtensionItem={handleToggleExtensionItem}
+          onToggleExtension={
+            handleToggleExtension
+          }
+          onToggleExtensionItem={
+            handleToggleExtensionItem
+          }
         />
       </section>
     </main>

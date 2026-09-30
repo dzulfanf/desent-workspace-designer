@@ -5,20 +5,33 @@ import type {
   WorkspaceProduct,
   WorkspaceProductWithAvailability,
 } from "@/types/workspace";
+
 import { DeskCard } from "./desk-card";
 
 type DeskGridProps = {
   products: WorkspaceProductWithAvailability[];
-  selectedDeskId: string | null;
+  selectedDeskId: string | null | undefined;
+  selectedDeskVariantId: string | null | undefined;
+
+  previewDeskVariants: Record<string, string>;
+
   onSelectDesk: (product: WorkspaceProduct) => void;
+  onPreviewDeskVariant: (
+    product: WorkspaceProduct,
+    variantId: string,
+  ) => void;
+
   currency: WorkspaceCurrency;
 };
 
 export function DeskGrid({
   products,
   selectedDeskId,
+  selectedDeskVariantId,
+  previewDeskVariants,
   onSelectDesk,
-  currency
+  onPreviewDeskVariant,
+  currency,
 }: DeskGridProps) {
   if (products.length === 0) {
     return (
@@ -36,10 +49,19 @@ export function DeskGrid({
         <DeskCard
           key={product.id}
           product={product}
-          isSelected={product.id === selectedDeskId}
+          isSelected={selectedDeskId === product.id}
           isAvailable={isAvailable}
           onSelect={() => onSelectDesk(product)}
           currency={currency}
+          selectedVariantId={
+            previewDeskVariants[product.id] ??
+            (selectedDeskId === product.id
+              ? selectedDeskVariantId ?? undefined
+              : undefined)
+          }
+          onVariantSelect={(variantId) =>
+            onPreviewDeskVariant(product, variantId)
+          }
         />
       ))}
     </div>

@@ -10,6 +10,8 @@ type DeskCardProps = {
   isAvailable: boolean;
   onSelect: () => void;
   currency: WorkspaceCurrency;
+  selectedVariantId?: string;
+  onVariantSelect: (variantId: string) => void;
 };
 
 export function DeskCard({
@@ -18,7 +20,17 @@ export function DeskCard({
   isAvailable,
   onSelect,
   currency,
+  selectedVariantId,
+  onVariantSelect,
 }: DeskCardProps) {
+
+  const selectedVariant = product.variants?.find(
+    (variant) => variant.id === selectedVariantId,
+  );
+
+  const displayImage =
+    selectedVariant?.image ?? product.image;
+    
   return (
     <article
       className={`border transition-colors ${
@@ -31,7 +43,7 @@ export function DeskCard({
     >
       <div className="aspect-[5/3] overflow-hidden bg-neutral-100">
         <img
-          src={product.image}
+          src={displayImage}
           alt={product.name}
           className="h-full w-full object-cover"
         />
@@ -70,15 +82,26 @@ export function DeskCard({
             </p>
 
             <div className="flex flex-wrap gap-1.5 sm:gap-2">
-              {product.variants.map((variant) => (
-                <button
-                  key={variant.id}
-                  type="button"
-                  className="border border-neutral-200 px-2 py-1 text-[10px] text-neutral-600 transition-colors hover:border-neutral-950 hover:text-neutral-950 sm:px-2.5 sm:py-1.5 sm:text-xs"
-                >
-                  {variant.value}
-                </button>
-              ))}
+              {product.variants.map((variant) => {
+                const isVariantSelected =
+                  selectedVariantId === variant.id;
+
+                return (
+                  <button
+                    key={variant.id}
+                    type="button"
+                    disabled={!isAvailable}
+                    onClick={() => onVariantSelect(variant.id)}
+                    className={`border px-2 py-1 text-[10px] transition-colors sm:px-2.5 sm:py-1.5 sm:text-xs ${
+                      isVariantSelected
+                        ? "border-neutral-950 bg-neutral-950 text-white"
+                        : "border-neutral-200 text-neutral-600 hover:border-neutral-950 hover:text-neutral-950"
+                    }`}
+                  >
+                    {variant.value}
+                  </button>
+                );
+              })}
             </div>
           </div>
         ) : null}
