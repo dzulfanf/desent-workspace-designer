@@ -27,68 +27,60 @@ export function Header({
 }: HeaderProps) {
   return (
     <header className="border-b border-neutral-200 bg-white">
-      <div className="mx-auto flex min-h-16 max-w-7xl items-center justify-between gap-6 px-6 py-3">
-        {/* Brand + Rental Settings */}
-        <div className="flex items-center gap-8">
-          <div className="shrink-0">
-            <p className="text-lg font-semibold tracking-tight">
-              Desent
-            </p>
-          </div>
+      <div className="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:gap-6 sm:px-6">
+        {/* Brand */}
+        <div className="flex items-center justify-between gap-4 sm:shrink-0">
+          <p className="text-lg font-semibold tracking-tight">
+            Desent
+          </p>
 
-          <div className="flex items-center gap-3">
-            <select
-              value={location?.id ?? ""}
-              onChange={(event) => {
-                const nextLocation = workspaceLocations.find(
-                  (item) => item.id === event.target.value,
-                );
-
-                if (nextLocation) {
-                  onLocationChange(nextLocation);
-                }
-              }}
-              className="rounded-full border border-neutral-200 bg-white px-4 py-2 text-sm outline-none transition-colors hover:border-neutral-400"
-            >
-              {workspaceLocations.map((item) => (
-                <option key={item.id} value={item.id}>
-                  {item.name}
-                </option>
-              ))}
-            </select>
-
-            <input
-              type="date"
-              value={rentalDate}
-              onChange={(event) =>
-                onRentalDateChange(event.target.value)
-              }
-              className="rounded-full border border-neutral-200 bg-white px-4 py-2 text-sm outline-none transition-colors hover:border-neutral-400"
+          {/* Currency on mobile */}
+          <div className="sm:hidden">
+            <CurrencySelector
+              value={currency}
+              onChange={onCurrencyChange}
             />
           </div>
         </div>
 
-        {/* Actions */}
-        <div className="flex shrink-0 items-center gap-3">
-          <CurrencySelector
-            value={currency}
-            onChange={onCurrencyChange}
+        {/* Right side: Location + Date + Currency */}
+        <div className="flex w-full items-center justify-end gap-2 sm:w-auto sm:shrink-0 sm:gap-3">
+          <select
+            value={location?.id ?? ""}
+            onChange={(event) => {
+              const nextLocation = workspaceLocations.find(
+                (item) => item.id === event.target.value,
+              );
+
+              if (nextLocation) {
+                onLocationChange(nextLocation);
+              }
+            }}
+            className="min-w-0 flex-1 rounded-full border border-neutral-200 bg-white px-3 py-2 text-sm outline-none transition-colors hover:border-neutral-400 sm:w-auto sm:flex-none sm:px-4"
+          >
+            {workspaceLocations.map((item) => (
+              <option key={item.id} value={item.id}>
+                {item.name}
+              </option>
+            ))}
+          </select>
+
+          <input
+            type="date"
+            value={rentalDate}
+            onChange={(event) =>
+              onRentalDateChange(event.target.value)
+            }
+            className="min-w-0 flex-1 rounded-full border border-neutral-200 bg-white px-3 py-2 text-sm outline-none transition-colors hover:border-neutral-400 sm:w-auto sm:flex-none sm:px-4"
           />
 
-          <button
-            type="button"
-            onClick={() => {
-              document
-                .getElementById("review-setup")
-                ?.scrollIntoView({
-                  behavior: "smooth",
-                  block: "start",
-                });
-            }}
-            className="rounded-full bg-neutral-950 px-5 py-2 text-sm font-medium text-white transition-colors hover:bg-neutral-800"
-          >
-            Review setup →
-          </button>
+          {/* Currency on tablet / desktop */}
+          <div className="hidden sm:block">
+            <CurrencySelector
+              value={currency}
+              onChange={onCurrencyChange}
+            />
+          </div>
         </div>
       </div>
     </header>

@@ -13,6 +13,14 @@ import type {
   WorkspaceLocation,
 } from "@/types/workspace";
 
+function getTomorrowDate() {
+  const date = new Date();
+
+  date.setDate(date.getDate() + 1);
+
+  return date.toISOString().split("T")[0];
+}
+
 export default function Home() {
   const [currency, setCurrency] =
     useState<WorkspaceCurrency>("USD");
@@ -23,7 +31,7 @@ export default function Home() {
     );
 
   const [rentalDate, setRentalDate] =
-    useState("");
+    useState(getTomorrowDate());
 
   return (
     <div className="min-h-screen bg-white text-neutral-950">

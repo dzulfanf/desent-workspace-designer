@@ -13,13 +13,13 @@ export function ExtensionCard({
 }: ExtensionCardProps) {
   return (
     <article
-      className={`bg-white p-6 transition-colors ${
+      className={`bg-white p-4 sm:p-5 transition-colors ${
         isSelected
           ? "bg-neutral-50"
           : ""
       }`}
     >
-      <div className="flex min-h-40 flex-col">
+      <div className="flex min-h-32 flex-col">
         <div>
           <div className="flex items-start justify-between gap-3">
             <h3 className="font-medium text-neutral-950">

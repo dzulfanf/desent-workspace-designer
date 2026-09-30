@@ -18,7 +18,6 @@ import { AccessoryGrid } from "./accessory/accessory-grid";
 import { VariantSelector } from "./variant-selector";
 import { WorkspacePreview } from "./workspace-preview";
 import { ExtensionGrid } from "./extensions/extension-grid";
-import { ReviewSetup } from "./review-setup";
 
 import {
   workspaceProducts,
@@ -26,6 +25,8 @@ import {
 } from "@/data/workspace";
 
 import { isProductAvailable } from "@/lib/workspace/is-product-available";
+import { ReviewSetupBar } from "./review-bar/review-summary-bar";
+import { ReviewSetupModal } from "./review/review-setup-modal";
 
 type WorkspaceTab =
   | "desks"
@@ -103,6 +104,8 @@ export function WorkspaceShell({
   const [activeTab, setActiveTab] =
     useState<WorkspaceTab>("desks");
 
+  const [isReviewOpen, setIsReviewOpen] = useState(false);
+
   const handleSelectDesk = (product: WorkspaceProduct) => {
     setSelectedDesk(product);
     setSelectedDeskVariant(null);
@@ -161,7 +164,7 @@ export function WorkspaceShell({
   );
 
   return (
-    <main className="mx-auto max-w-7xl px-6 py-12">
+    <main className="mx-auto max-w-7xl px-6 pb-20 pt-12">
       <div className="mb-10 max-w-2xl">
         <p className="mb-3 text-sm font-medium text-neutral-500">
           Workspace designer
@@ -176,8 +179,8 @@ export function WorkspaceShell({
         </p>
       </div>
 
-      <section className="grid overflow-hidden bg-white lg:grid-cols-[minmax(0,1fr)_minmax(420px,0.9fr)]">
-        <div className="border-b border-neutral-200 pr-6 lg:border-b-0 lg:border-r">
+      <section className="grid overflow-hidden bg-white lg:grid-cols-[minmax(0,1fr)_minmax(320px,0.8fr) xl:grid-cols-[minmax(0,1fr)_minmax(400px,0.8fr)]">
+        <div className="border-b border-neutral-200 xl:pr-6 pb-4">
           <div className="flex rounded-xl border border-neutral-200 bg-neutral-50 p-1">
             <button
               type="button"
@@ -313,7 +316,20 @@ export function WorkspaceShell({
         />
       </section>
 
-      <ReviewSetup
+      <ReviewSetupBar
+        currency={currency}
+        desk={selectedDesk}
+        chair={selectedChair}
+        accessories={selectedAccessories}
+        extensionItems={selectedExtensionItems}
+        itemCount={itemCount}
+        onOpen={() =>  setIsReviewOpen(true)}
+      />
+
+      <ReviewSetupModal
+        isOpen={isReviewOpen}
+        onClose={() => setIsReviewOpen(false)}
+        currency={currency}
         desk={selectedDesk}
         deskVariant={selectedDeskVariant}
         chair={selectedChair}
@@ -322,10 +338,9 @@ export function WorkspaceShell({
         extensions={selectedExtensions}
         extensionItems={selectedExtensionItems}
         itemCount={itemCount}
-        currency={currency}
       />
 
-      <section className="mt-20">
+      <section className="mt-8">
         <div className="mb-8">
           <p className="text-sm font-medium text-neutral-500">
             Extend your workspace

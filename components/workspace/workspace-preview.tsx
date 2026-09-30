@@ -21,7 +21,7 @@ export function WorkspacePreview({
 
    if (!desk) {
     return (
-      <div className="flex min-h-[560px] items-center justify-center bg-neutral-50">
+      <div className="flex min-h-[560px] items-center justify-center bg-neutral-50 mt-4 xl:mt-0">
         <p className="text-sm text-neutral-400">
           Select a desk to start designing
         </p>
@@ -30,7 +30,7 @@ export function WorkspacePreview({
   }
   
   return (
-    <div className="flex min-h-[560px] w-full items-center justify-center bg-neutral-50/70 p-8">
+    <div className="flex min-h-[560px] w-full items-center justify-center bg-neutral-50/70 p-8 mt-4 xl:mt-0">
       <div className="w-full max-w-lg">
         <div className="mb-6">
           <p className="text-xs font-medium uppercase tracking-[0.12em] text-neutral-400">

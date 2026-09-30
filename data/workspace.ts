@@ -141,45 +141,45 @@ export const workspaceProducts: WorkspaceProduct[] = [
     ],
   },
 
-  {
-    id: "desk-fjord-executive",
-    type: "desk",
-    name: "Fjord Executive Desk",
-    pricePerWeek: 22,
-    description:
-      "Executive desk with oak veneer and concealed wire management.",
-    dimensions: "180 × 85 cm",
-    image: "/workspace/desks/fjord-executive.jpg",
-    variants: [
-      {
-        id: "smoked-walnut",
-        name: "Finish",
-        value: "Smoked Walnut",
-      },
-    ],
-    availability: [
-      {
-        locationId: "bali",
-        bookedFrom: "2026-10-09",
-        bookedUntil: "2026-10-15",
-      },
-      {
-        locationId: "bali",
-        bookedFrom: "2026-10-22",
-        bookedUntil: "2026-10-28",
-      },
-      {
-        locationId: "chiang-mai",
-        bookedFrom: "2026-10-12",
-        bookedUntil: "2026-10-18",
-      },
-      {
-        locationId: "chiang-mai",
-        bookedFrom: "2026-10-28",
-        bookedUntil: "2026-10-30",
-      },
-    ],
-  },
+  // {
+  //   id: "desk-fjord-executive",
+  //   type: "desk",
+  //   name: "Fjord Executive Desk",
+  //   pricePerWeek: 22,
+  //   description:
+  //     "Executive desk with oak veneer and concealed wire management.",
+  //   dimensions: "180 × 85 cm",
+  //   image: "/workspace/desks/fjord-executive.jpg",
+  //   variants: [
+  //     {
+  //       id: "smoked-walnut",
+  //       name: "Finish",
+  //       value: "Smoked Walnut",
+  //     },
+  //   ],
+  //   availability: [
+  //     {
+  //       locationId: "bali",
+  //       bookedFrom: "2026-10-09",
+  //       bookedUntil: "2026-10-15",
+  //     },
+  //     {
+  //       locationId: "bali",
+  //       bookedFrom: "2026-10-22",
+  //       bookedUntil: "2026-10-28",
+  //     },
+  //     {
+  //       locationId: "chiang-mai",
+  //       bookedFrom: "2026-10-12",
+  //       bookedUntil: "2026-10-18",
+  //     },
+  //     {
+  //       locationId: "chiang-mai",
+  //       bookedFrom: "2026-10-28",
+  //       bookedUntil: "2026-10-30",
+  //     },
+  //   ],
+  // },
 
   {
     id: "chair-atlas-ergonomic",
@@ -489,6 +489,13 @@ export const workspaceExtensions: WorkspaceExtension[] = [
         description:
           "Temperature-controlled kettle for tea and pour-over coffee.",
         pricePerWeek: 4,
+      },
+      {
+        id: "coffee-machine-pro",
+        name: "Professional Coffee Machine",
+        description:
+          "A compact espresso machine for making espresso, americano, and other coffee drinks.",
+        pricePerWeek: 35,
       },
     ],
   },
