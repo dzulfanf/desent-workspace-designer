@@ -20,6 +20,7 @@ import { WorkspacePreview } from "./workspace-preview";
 import { ExtensionGrid } from "./extensions/extension-grid";
 
 import {
+  workspaceLocations,
   workspaceProducts,
   workspaceRentals,
 } from "@/data/workspace";
@@ -37,12 +38,16 @@ type WorkspaceShellProps = {
   currency: WorkspaceCurrency;
   location: WorkspaceLocation | null;
   rentalDate: string;
+  onLocationChange: (location: WorkspaceLocation) => void;
+  onRentalDateChange: (date: string) => void;
 };
 
 export function WorkspaceShell({
   currency,
   location,
   rentalDate,
+  onLocationChange,
+  onRentalDateChange
 }: WorkspaceShellProps) {
   const [selectedDesk, setSelectedDesk] =
     useState<WorkspaceProduct | null>(null);
@@ -177,6 +182,37 @@ export function WorkspaceShell({
         <p className="mt-4 max-w-xl text-[15px] leading-7 text-neutral-500">
           Build a workspace that fits the way you work.
         </p>
+      </div>
+
+      <div className="mb-4 flex gap-2 md:hidden">
+        <select
+          value={location?.id ?? ""}
+          onChange={(event) => {
+            const nextLocation = workspaceLocations.find(
+              (item) => item.id === event.target.value,
+            );
+
+            if (nextLocation) {
+              onLocationChange(nextLocation);
+            }
+          }}
+          className="min-w-0 flex-1 rounded-full border border-neutral-200 bg-white px-3 py-2 text-sm outline-none transition-colors hover:border-neutral-400"
+        >
+          {workspaceLocations.map((item) => (
+            <option key={item.id} value={item.id}>
+              {item.name}
+            </option>
+          ))}
+        </select>
+
+        <input
+          type="date"
+          value={rentalDate}
+          onChange={(event) =>
+            onRentalDateChange(event.target.value)
+          }
+          className="min-w-0 flex-1 rounded-full border border-neutral-200 bg-white px-3 py-2 text-sm outline-none transition-colors hover:border-neutral-400"
+        />
       </div>
 
       <section className="grid overflow-hidden bg-white lg:grid-cols-[minmax(0,1fr)_minmax(320px,0.8fr) xl:grid-cols-[minmax(0,1fr)_minmax(400px,0.8fr)]">

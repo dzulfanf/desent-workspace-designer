@@ -44,7 +44,7 @@ export function Header({
         </div>
 
         {/* Right side: Location + Date + Currency */}
-        <div className="flex w-full items-center justify-end gap-2 sm:w-auto sm:shrink-0 sm:gap-3">
+        <div className="hidden items-center justify-end gap-3 md:flex md:shrink-0">
           <select
             value={location?.id ?? ""}
             onChange={(event) => {

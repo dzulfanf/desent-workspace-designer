@@ -47,7 +47,9 @@ export default function Home() {
       <WorkspaceShell
         currency={currency}
         location={location}
+        onLocationChange={setLocation}
         rentalDate={rentalDate}
+        onRentalDateChange={setRentalDate}
       />
 
       <Footer />
